@@ -1,6 +1,7 @@
 //REQUIRES/VARIABLES
 const express = require("express");
 const db = require("./config/connection");
+const routes = require("./routes");
 
 //ADD MODEL REQUIRE IF NEEDED
 
@@ -10,6 +11,7 @@ const app = express();
 //MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(routes);
 
 //LISTEN
 db.once("open", () => {
