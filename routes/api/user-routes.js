@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User, Thoughts, Reaction } = require("../../models/index");
+const { User, Thought } = require("../../models/index");
 
 //GET ALL USERS
 router.get("/", async (req, res) => {
@@ -21,7 +21,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//CREATE USER
+//POST NEW USER
 router.post("/", async (req, res) => {
   try {
     const newUserData = new User({
@@ -38,6 +38,8 @@ router.post("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+//DELETE USER BY ID
 
 //EXPORT
 module.exports = router;

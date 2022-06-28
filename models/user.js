@@ -2,16 +2,22 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
-  //ADD VALIDATION
+  //ADD VALIDATION!!!!
   email: { type: String, required: true, unique: true },
-  // thoughts: [Thoughts._id],
-  // friends: [User._id],
-  // friendCount: [friends.length],
+  thoughts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Thought" }],
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
-const User = mongoose.model("User", userSchema);
-
 const handleError = (err) => console.error(err);
+
+userSchema.virtual("friendCount").get(function () {
+  return this.friends.length;
+});
 
 User.create(
   {
@@ -28,5 +34,7 @@ User.create(
   },
   (err) => (err ? handleError(err) : console.log("Created new user"))
 );
+
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
