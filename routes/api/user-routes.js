@@ -39,7 +39,34 @@ router.post("/", async (req, res) => {
   }
 });
 
+//UPDATE NOT WORKING!!!!!!!!!!!!
+//PUT USER BY ID
+router.put("/:id", async (req, res) => {
+  try {
+    const updateUser = await User.findOneAndUpdate({ _id: req.params.id });
+    if (updateUser) {
+      res.status(200).json(updateUser);
+    } else {
+      res.status(404).json({ message: "Could not update user with that ID" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 //DELETE USER BY ID
+router.delete("/:id", async (req, res) => {
+  try {
+    const deleteUser = await User.findOneAndDelete({ _id: req.params.id });
+    if (deleteUser) {
+      res.status(200).json(deleteUser);
+    } else {
+      res.status(404).json({ message: "Could not delte user with that ID." });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 //EXPORT
 module.exports = router;

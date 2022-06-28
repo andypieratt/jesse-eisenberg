@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { threadId } = require("worker_threads");
 const reactionSchema = require("./reaction.js");
 
 const thoughtSchema = new mongoose.Schema(
@@ -26,6 +25,6 @@ thoughtSchema.virtual("reactionCount").get(function () {
   return this.reactions.length;
 });
 
-const Thought = model("Thought", thoughtSchema);
+const Thought = mongoose.model("Thought", thoughtSchema);
 
 module.exports = Thought;

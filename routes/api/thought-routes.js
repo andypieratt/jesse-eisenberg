@@ -43,16 +43,14 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const updateThought = await Thought.findOneAndUpdate({
-      _id: req.params.thoughtId,
+      _id: req.params.id,
     });
     if (updateThought) {
       res.status(200).json(updateThought);
     } else {
-      res
-        .status(404)
-        .json({
-          message: "Could not update because no thought found with that ID",
-        });
+      res.status(404).json({
+        message: "Could not update because no thought found with that ID",
+      });
     }
   } catch (err) {
     res.status(500).json(err);
@@ -63,7 +61,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const deleteThought = await Thought.finOneAndDelete({
-      _id: req.params.thoughtId,
+      _id: req.params.id,
     });
     if (deleteThought) {
       res.status(200).json(deleteThought);

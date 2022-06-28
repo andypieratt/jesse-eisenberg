@@ -19,6 +19,8 @@ userSchema.virtual("friendCount").get(function () {
   return this.friends.length;
 });
 
+const User = mongoose.model("User", userSchema);
+
 User.create(
   {
     username: "andypieratt",
@@ -34,7 +36,5 @@ User.create(
   },
   (err) => (err ? handleError(err) : console.log("Created new user"))
 );
-
-const User = mongoose.model("User", userSchema);
 
 module.exports = User;
