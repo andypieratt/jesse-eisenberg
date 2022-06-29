@@ -1,17 +1,25 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, unique: true, required: true },
-  //ADD VALIDATION!!!!
-  email: { type: String, required: true, unique: true },
-  thoughts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Thought" }],
-  friends: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+const userSchema = new mongoose.Schema(
+  {
+    username: { type: String, unique: true, required: true },
+    //ADD VALIDATION!!!!
+    email: { type: String, required: true, unique: true },
+    thoughts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Thought" }],
+    friends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+  },
+  {
+    toJSON: {
+      virtuals: true,
     },
-  ],
-});
+    id: false,
+  }
+);
 
 const handleError = (err) => console.error(err);
 

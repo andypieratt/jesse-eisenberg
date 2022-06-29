@@ -42,9 +42,13 @@ router.post("/", async (req, res) => {
 //PUT THOUGHT BY ID
 router.put("/:id", async (req, res) => {
   try {
-    const updateThought = await Thought.findOneAndUpdate({
-      _id: req.params.id,
-    });
+    const updateThought = await Thought.findOneAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    );
     if (updateThought) {
       res.status(200).json(updateThought);
     } else {

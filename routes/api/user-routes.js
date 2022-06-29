@@ -39,16 +39,29 @@ router.post("/", async (req, res) => {
   }
 });
 
-//UPDATE NOT WORKING!!!!!!!!!!!!
 //PUT USER BY ID
 router.put("/:id", async (req, res) => {
   try {
-    const updateUser = await User.findOneAndUpdate({ _id: req.params.id });
+    const updateUser = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    );
+    updateUser.save();
     if (updateUser) {
       res.status(200).json(updateUser);
     } else {
       res.status(404).json({ message: "Could not update user with that ID" });
     }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//ADD FRIEND TO FRIENDS LIST
+router.post("/:id/friends/:friendId", async (req, res) => {
+  try {
+    const addFriend = await User({});
   } catch (err) {
     res.status(500).json(err);
   }
@@ -61,7 +74,7 @@ router.delete("/:id", async (req, res) => {
     if (deleteUser) {
       res.status(200).json(deleteUser);
     } else {
-      res.status(404).json({ message: "Could not delte user with that ID." });
+      res.status(404).json({ message: "Could not delete user with that ID." });
     }
   } catch (err) {
     res.status(500).json(err);
