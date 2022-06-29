@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { User, Thought } = require("../../models/index");
+const { add } = require("../../models/reaction");
 
 //GET ALL THOUGHTS
 router.get("/", async (req, res) => {
@@ -33,6 +34,25 @@ router.post("/", async (req, res) => {
       res.status(200).json(newThought);
     } else {
       res.status(404).json({ message: "Could not create a new Thought" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//WORK ON THIS ONE!!!!
+//POST REACTION BY ID
+router.post("/:id/reactions", async (req, res) => {
+  try {
+    const addReaction = await Thought.findOne({ _id: req.params.id });
+    addReaction.reactions.push();
+    await addReaction.save();
+    if (addReaction) {
+      res.status(200).json(addReaction);
+    } else {
+      res
+        .status(404)
+        .json({ message: "Could not add reaction to the thought." });
     }
   } catch (err) {
     res.status(500).json(err);

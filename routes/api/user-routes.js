@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { User, Thought } = require("../../models/index");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 //GET ALL USERS
 router.get("/", async (req, res) => {
@@ -61,7 +62,14 @@ router.put("/:id", async (req, res) => {
 //ADD FRIEND TO FRIENDS LIST
 router.post("/:id/friends/:friendId", async (req, res) => {
   try {
-    const addFriend = await User({});
+    const addFriend = await User.findOne({ _id: new ObjectId(req.params.id) });
+    addFriend.friends.push(new ObjectId(req.params.friendId));
+    await addFriend.save();
+    if (addFriend) {
+      res.status(200).json(addFriend);
+    } else {
+      res.status(404).json({ message: "Failed to add friend." });
+    }
   } catch (err) {
     res.status(500).json(err);
   }
