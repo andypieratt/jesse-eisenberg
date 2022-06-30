@@ -106,9 +106,10 @@ router.put("/:id", async (req, res) => {
 //DELETE THOUGHT BY ID
 router.delete("/:id", async (req, res) => {
   try {
-    const deleteThought = await Thought.finOneAndDelete({
+    const deleteThought = await Thought.findOneAndDelete({
       _id: req.params.id,
     });
+    await deleteThought.save();
     if (deleteThought) {
       res.status(200).json(deleteThought);
     } else {
