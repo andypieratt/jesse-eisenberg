@@ -75,6 +75,27 @@ router.post("/:id/friends/:friendId", async (req, res) => {
   }
 });
 
+//DELETE FROM FRIENDS LIST
+router.delete("/:id/friends/:friendId", async (req, res) => {
+  try {
+    const deleteFriend = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $pull: { friends: ObjectId(req.params.friendId) } },
+      { runValidators: true, new: true }
+    );
+    await deleteFriend.save();
+    if (deleteFriend) {
+      res.status(200).json(deleteFriend);
+    } else {
+      res
+        .status(404)
+        .json({ message: "Could not remove freind with that ID." });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 //DELETE USER BY ID
 router.delete("/:id", async (req, res) => {
   try {

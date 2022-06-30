@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { User, Thought } = require("../../models/index");
-const { add } = require("../../models/reaction");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 //GET ALL THOUGHTS
 router.get("/", async (req, res) => {
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
   try {
     const newThought = new Thought({
       thoughtText: req.body.thoughtText,
-      username: req.body.username,
+      username: req.body.ObjectId,
     });
     newThought.save();
     if (newThought) {
@@ -40,12 +40,13 @@ router.post("/", async (req, res) => {
   }
 });
 
-//WORK ON THIS ONE!!!!
 //POST REACTION BY ID
 router.post("/:id/reactions", async (req, res) => {
   try {
-    const addReaction = await Thought.findOne({ _id: req.params.id });
-    addReaction.reactions.push();
+    const addReaction = await Thought.findOne({
+      _id: new ObjectId(req.params.id),
+    });
+    addReaction.reactions.push(req.body);
     await addReaction.save();
     if (addReaction) {
       res.status(200).json(addReaction);
@@ -53,6 +54,27 @@ router.post("/:id/reactions", async (req, res) => {
       res
         .status(404)
         .json({ message: "Could not add reaction to the thought." });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//DELETE REACTION BY ID
+router.delete("/:thoughtId/reactions/:reactionId", async (req, res) => {
+  try {
+    const removeReaction = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
+      { runValidators: true, new: true }
+    );
+    await removeReaction.save();
+    if (removeReaction) {
+      res.status(200).json(removeReaction);
+    } else {
+      res
+        .status(404)
+        .json({ message: "Could not delete reaction to the thought." });
     }
   } catch (err) {
     res.status(500).json(err);
